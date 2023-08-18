@@ -279,16 +279,3 @@ func GenerateController(name, namePlural string, fields map[string]Field) {
 
 	g.Generate()
 }
-
-func GenerateUsecase(name, namePlural string, fields map[string]Field) {
-	g := Generator{
-		Name:         name,
-		NamePlural:   namePlural,
-		Type:         "Usecase",
-		TemplateName: "usecase",
-		OutputName:   strings.ToLower(name),
-		Fields:       fields,
-	}
-
-	g.Generate()
-}
