@@ -1,0 +1,23 @@
+package {{name}}_controller
+
+import (
+	"{{project_name}}/usecases/{{name}}_case"
+	fiber_framework "{{project_name}}/frameworks/http/fiber"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func (c {{name_capitalized}}Controller) Create(ctx *fiber.Ctx) error {
+	data := &{{name}}_case.CreateInput{}
+	if err := fiber_framework.ValidateBody(data, ctx); err != nil {
+		return ctx.JSON(err)
+	}
+
+	id, err := c.usecase.Create(ctx.Context(), data)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.SendString(id)
+}

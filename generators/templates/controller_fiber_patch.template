@@ -1,0 +1,32 @@
+package {{name}}_controller
+
+import (
+	"{{project_name}}/usecases/{{name}}_case"
+	fiber_framework "{{project_name}}/frameworks/http/fiber"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func (c {{name_capitalized}}Controller) Patch(ctx *fiber.Ctx) error {
+	filter := &{{name}}_case.PatchFilter{}
+	if err := ctx.QueryParser(&filter); err != nil {
+		return err
+	}
+
+	data := {{name}}_case.PatchValues{}
+	if err := fiber_framework.ValidateBody(&data, ctx); err != nil {
+		return ctx.JSON(err)
+	}
+
+	updated, err := c.usecase.Patch(ctx.Context(), *filter, data)
+
+	if err != nil {
+		return err
+	}
+
+	if updated {
+		return ctx.SendStatus(200)
+	}
+
+	return ctx.SendStatus(404)
+}

@@ -1,0 +1,16 @@
+package {{name}}_case
+
+import (
+	"context"
+	g "{{project_name}}/adapters/gateways/{{name}}_gateway"
+)
+
+type ListInput struct {
+	{{fields}}
+}
+
+func (c {{name_capitalized}}Case) List(ctx context.Context, input ListInput) ([]g.ListOutput, error) {
+	return c.gateway.List(g.ListInput{
+		{{adapt_input}}
+	})
+}

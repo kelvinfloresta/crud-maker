@@ -1,0 +1,9 @@
+package {{name}}_case
+
+import (
+	"context"
+)
+
+func (c {{name_capitalized}}Case) Delete(ctx context.Context, id string) (bool, error) {
+	return c.gateway.Delete(id)
+}

@@ -1,0 +1,16 @@
+package {{name}}_gateway
+
+import (
+	"{{project_name}}/frameworks/database/gorm/models"
+)
+
+func (g Gorm{{name_capitalized}}GatewayAdapter) List(filter ListInput) ([]ListOutput, error) {
+	query := g.DB.Conn.Model(&models.{{name_capitalized}}{})
+
+	{{filters}}
+
+	output := []ListOutput{}
+	result := query.Scan(&output)
+
+	return output, result.Error
+}

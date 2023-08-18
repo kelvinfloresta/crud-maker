@@ -1,0 +1,24 @@
+package {{name}}_gateway
+
+import (
+	"{{project_name}}/frameworks/database/gorm/models"
+)
+
+func (g Gorm{{name_capitalized}}GatewayAdapter) GetByID(id string) (*GetByIDOutput, error) {
+	data := &models.{{name_capitalized}}{}
+	result := g.DB.Conn.Limit(1).Find(data, "id = ?", id)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return nil, nil
+	}
+
+	adapted := GetByIDOutput{
+		{{adapt_data}}
+	}
+
+	return &adapted, nil
+}

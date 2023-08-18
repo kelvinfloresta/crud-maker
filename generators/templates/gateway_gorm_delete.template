@@ -1,0 +1,13 @@
+package {{name}}_gateway
+
+import (
+	"{{project_name}}/frameworks/database/gorm/models"
+)
+
+func (g *Gorm{{name_capitalized}}GatewayAdapter) Delete(id string) (bool, error) {
+	result := g.DB.Conn.Where(
+		"id = ?", id,
+	).Delete(&models.{{name_capitalized}}{})
+
+	return result.RowsAffected > 0, result.Error
+}

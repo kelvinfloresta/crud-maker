@@ -1,0 +1,9 @@
+package {{name}}_gateway
+
+import (
+	database "crud-maker/frameworks/database/gorm"
+)
+
+type {{name_capitalized}}Gateway interface {
+	{{method_capitalized}}({{method_input}}) {{method_output}}
+}

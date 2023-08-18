@@ -1,0 +1,42 @@
+package {{name}}_gateway
+
+import (
+	database "{{project_name}}/frameworks/database/gorm"
+	"{{project_name}}/frameworks/database/gorm/models"
+)
+
+func (g Gorm{{name_capitalized}}GatewayAdapter) Paginate(filter PaginateFilter, paginate database.PaginateInput) (*PaginateOutput, error) {
+	data := []PaginateData{}
+
+	query := g.DB.Conn.Model(&models.{{name_capitalized}}{})
+
+	{{filters}}
+
+	var count int64
+	result := query.Count(&count)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return &PaginateOutput{
+			Data:     data,
+			MaxPages: 0,
+		}, nil
+	}
+
+	database.Paginate(query, paginate)
+
+	result = query.Scan(&data)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	output := &PaginateOutput{
+		Data:     data,
+		MaxPages: database.CalcMaxPages(count, paginate.PageSize),
+	}
+
+	return output, nil
+}

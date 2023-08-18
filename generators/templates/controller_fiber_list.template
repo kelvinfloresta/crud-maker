@@ -1,0 +1,22 @@
+package {{name}}_controller
+
+import (
+	"{{project_name}}/usecases/{{name}}_case"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func (c {{name_capitalized}}Controller) List(ctx *fiber.Ctx) error {
+	filter := &{{name}}_case.ListInput{}
+	if err := ctx.QueryParser(&filter); err != nil {
+		return err
+	}
+	
+	result, err := c.usecase.List(ctx.Context(), *filter)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(result)
+}

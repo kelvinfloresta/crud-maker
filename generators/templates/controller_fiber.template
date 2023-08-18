@@ -1,0 +1,13 @@
+package {{name}}_controller
+
+import (
+	"{{project_name}}/usecases/{{name}}_case"
+)
+
+type {{name_capitalized}}Controller struct {
+	usecase {{name}}_case.{{name_capitalized}}Case
+}
+
+func New(usecase {{name}}_case.{{name_capitalized}}Case) *{{name_capitalized}}Controller {
+	return &{{name_capitalized}}Controller{usecase}
+}

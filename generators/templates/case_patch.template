@@ -1,0 +1,22 @@
+package {{name}}_case
+
+import (
+	"context"
+	g "{{project_name}}/adapters/gateways/{{name}}_gateway"
+)
+
+type PatchFilter struct {
+	{{fields_optional}}
+}
+
+type PatchValues struct {
+	{{fields}}
+}
+
+func (c {{name_capitalized}}Case) Patch(ctx context.Context, filter PatchFilter, values PatchValues) (bool, error) {
+	return c.gateway.Patch(g.PatchFilter{
+		{{adapt_filter}}
+	}, g.PatchValues{
+		{{adapt_values}}
+	},)
+}

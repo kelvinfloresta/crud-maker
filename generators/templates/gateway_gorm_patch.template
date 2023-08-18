@@ -1,0 +1,10 @@
+package {{name}}_gateway
+
+import (
+	"{{project_name}}/frameworks/database/gorm/models"
+)
+
+func (g Gorm{{name_capitalized}}GatewayAdapter) Patch(filter PatchFilter, newValues PatchValues) (bool, error) {
+	result := g.DB.Conn.Model(&models.{{name_capitalized}}{}).Select("*").Updates(newValues)
+	return result.RowsAffected > 0, result.Error
+}

@@ -1,0 +1,9 @@
+package {{name}}_gateway
+
+import (
+	database "{{project_name}}/frameworks/database/gorm"
+)
+
+type Gorm{{name_capitalized}}GatewayAdapter struct {
+	DB *database.Database
+}

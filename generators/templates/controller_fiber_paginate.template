@@ -1,0 +1,38 @@
+package {{name}}_controller
+
+import (
+	"strconv"
+	database "{{project_name}}/frameworks/database/gorm"
+	"{{project_name}}/usecases/{{name}}_case"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func (c {{name_capitalized}}Controller) Paginate(ctx *fiber.Ctx) error {
+	page, err := strconv.Atoi(ctx.Query("Page"))
+	if err != nil {
+		return err
+	}
+
+	pageSize, err := strconv.Atoi(ctx.Query("PageSize"))
+	if err != nil {
+		return err
+	}
+
+	filter := {{name}}_case.PaginateFilter{
+		{{fields_query}}
+	}
+
+	paginate := database.PaginateInput{
+		Page: page,
+		PageSize: pageSize,
+	}
+
+	result, err := c.usecase.Paginate(ctx.Context(), filter, paginate)
+
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(result)
+}

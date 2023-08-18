@@ -1,0 +1,10 @@
+package models
+
+type {{name_capitalized}} struct {
+	ID        string `gorm:"type:uuid"`
+	{{fields_model}}
+}
+
+func (m {{name_capitalized}}) TableName() string {
+	return "{{name_plural}}"
+}
