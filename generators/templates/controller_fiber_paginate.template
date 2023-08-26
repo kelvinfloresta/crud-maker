@@ -19,8 +19,9 @@ func (c {{name_capitalized}}Controller) Paginate(ctx *fiber.Ctx) error {
 		return err
 	}
 
+	{{fields_query}}
 	filter := {{name}}_case.PaginateFilter{
-		{{fields_query}}
+		{{fields_pointer}}
 	}
 
 	paginate := database.PaginateInput{
