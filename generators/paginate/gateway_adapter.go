@@ -24,7 +24,7 @@ func NewGatewayAdapter(name, namePlural string, fields map[string]generators.Fie
 }
 
 func (c *PaginateGatewayAdapter) Generate() {
-	template := utils.ReadTemplate("gateway_gorm_paginate.template")
+	template := utils.ReadTemplate("gateway_gorm_paginate")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

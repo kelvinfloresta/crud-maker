@@ -7,7 +7,7 @@ import (
 )
 
 func ReadTemplate(name string) string {
-	path := fmt.Sprintf("%s%s", config.TemplatePath, name)
+	path := fmt.Sprintf("%s%s.template", config.TemplatePath, name)
 	file, err := os.ReadFile(path)
 	PanicIfError(err)
 	template := string(file)

@@ -24,7 +24,7 @@ func NewCase(name, namePlural string, fields map[string]generators.Field) PatchC
 }
 
 func (c PatchCase) Generate() {
-	template := utils.ReadTemplate("case_patch.template")
+	template := utils.ReadTemplate("case_patch")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

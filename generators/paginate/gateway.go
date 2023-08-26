@@ -28,7 +28,7 @@ func (c PaginateGateway) Generate() {
 	if fileExist {
 		template = generators.AppendMethodToInterface(template)
 	} else {
-		template = utils.ReadTemplate("gateway_interface.template")
+		template = utils.ReadTemplate("gateway_interface")
 	}
 
 	template = fmt.Sprintf(`%s

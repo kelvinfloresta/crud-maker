@@ -24,7 +24,7 @@ func NewController(name, namePlural string, fields map[string]generators.Field) 
 }
 
 func (c GetByIDController) Generate() {
-	template := utils.ReadTemplate("controller_fiber_get_by_id.template")
+	template := utils.ReadTemplate("controller_fiber_get_by_id")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

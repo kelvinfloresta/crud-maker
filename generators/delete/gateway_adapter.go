@@ -24,7 +24,7 @@ func NewGatewayAdapter(name, namePlural string, fields map[string]generators.Fie
 }
 
 func (c *DeleteGatewayAdapter) Generate() {
-	template := utils.ReadTemplate("gateway_gorm_delete.template")
+	template := utils.ReadTemplate("gateway_gorm_delete")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

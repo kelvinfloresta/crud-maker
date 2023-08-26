@@ -24,7 +24,7 @@ func NewCase(name, namePlural string, fields map[string]generators.Field) Pagina
 }
 
 func (c PaginateCase) Generate() {
-	template := utils.ReadTemplate("case_paginate.template")
+	template := utils.ReadTemplate("case_paginate")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

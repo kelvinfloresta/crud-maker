@@ -24,7 +24,7 @@ func NewController(name, namePlural string, fields map[string]generators.Field) 
 }
 
 func (c PatchController) Generate() {
-	template := utils.ReadTemplate("controller_fiber_patch.template")
+	template := utils.ReadTemplate("controller_fiber_patch")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

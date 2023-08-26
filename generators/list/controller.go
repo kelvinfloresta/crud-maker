@@ -24,7 +24,7 @@ func NewController(name, namePlural string, fields map[string]generators.Field) 
 }
 
 func (c ListController) Generate() {
-	template := utils.ReadTemplate("controller_fiber_list.template")
+	template := utils.ReadTemplate("controller_fiber_list")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

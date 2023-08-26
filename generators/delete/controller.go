@@ -24,7 +24,7 @@ func NewController(name, namePlural string, fields map[string]generators.Field) 
 }
 
 func (c DeleteController) Generate() {
-	template := utils.ReadTemplate("controller_fiber_delete.template")
+	template := utils.ReadTemplate("controller_fiber_delete")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,

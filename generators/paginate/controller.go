@@ -24,7 +24,7 @@ func NewController(name, namePlural string, fields map[string]generators.Field) 
 }
 
 func (c PaginateController) Generate() {
-	template := utils.ReadTemplate("controller_fiber_paginate.template")
+	template := utils.ReadTemplate("controller_fiber_paginate")
 
 	template = generators.ParseTemplate(generators.ParseTemplateInput{
 		Template:     template,
