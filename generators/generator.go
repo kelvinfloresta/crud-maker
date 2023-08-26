@@ -8,208 +8,50 @@ import (
 	"strings"
 )
 
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
 type Field struct {
 	IsRequired bool
 	Type       string
 }
 
 type Generator struct {
-	Name         string
-	NamePlural   string
-	Type         string
-	TemplateName string
-	OutputName   string
-	outputPath   string
-	Fields       map[string]Field
+	name         string
+	namePlural   string
+	templateName string
+	outputFile   string
+	fields       map[string]Field
 }
 
-func (g Generator) Generate() {
-	g.outputPath = g.getOutputPath()
-	err := os.MkdirAll(g.outputPath, config.Permission)
-	CheckError(err)
+func (g *Generator) Generate() {
+	template := utils.ReadTemplate(g.templateName)
 
-	dest := fmt.Sprint(g.outputPath, "/", g.OutputName, ".go")
-	var template string
+	parsed := ParseTemplate(ParseTemplateInput{
+		Template:     template,
+		Name:         g.name,
+		MethodName:   "",
+		MethodInput:  "",
+		MethodOutput: "",
+		NamePlural:   g.namePlural,
+		Fields:       g.fields,
+	})
 
-	if _, err := os.Stat(dest); err == nil {
-		file, err := os.ReadFile(dest)
-		CheckError(err)
-		if g.OutputName == "interface" {
-			template = strings.Replace(
-				string(file),
-				"}",
-				"{{method_capitalized}}({{method_input}}) {{method_output}}\n}",
-				1,
-			)
-		}
-	} else {
-		path := fmt.Sprint(config.TemplatePath, "/", g.TemplateName, ".template")
-		file, err := os.ReadFile(path)
-		CheckError(err)
-		template = string(file)
-	}
-
-	parsed := g.parseTemplate(template)
-	err = os.WriteFile(dest, []byte(parsed), config.Permission)
-	CheckError(err)
+	g.createPath()
+	utils.WriteTemplate(parsed, g.outputFile)
 }
 
-func (g Generator) getOutputPath() string {
-	switch {
-	case strings.Contains(g.TemplateName, "model"):
-		return "frameworks/database/gorm/models"
-
-	case strings.Contains(g.TemplateName, "gateway"):
-		return fmt.Sprintf("adapters/gateways/%s_gateway/", strings.ToLower(g.Name))
-
-	case strings.Contains(g.TemplateName, "controller"):
-		return fmt.Sprintf("adapters/controllers/%s_controller/", strings.ToLower(g.Name))
-
-	case strings.Contains(g.TemplateName, "case"):
-		return fmt.Sprintf("usecases/%s_case/", strings.ToLower(g.Name))
-
-	default:
-		panic("output path not found")
-	}
-}
-
-func (g Generator) parseTemplate(template string) string {
-	result := strings.ReplaceAll(template, "{{name}}", strings.ToLower(g.Name))
-	result = strings.ReplaceAll(result, "{{name_capitalized}}", strings.Title(g.Name))
-	result = strings.ReplaceAll(result, "{{method_capitalized}}", strings.Title(g.Type))
-	result = strings.ReplaceAll(result, "{{name_plural}}", utils.ToSnakeCase(g.NamePlural))
-	result = strings.ReplaceAll(result, "{{project_name}}", config.ProjectName)
-
-	return g.generateMethods(result)
-}
-
-func (g Generator) generateMethods(template string) string {
-	var (
-		filters        = make([]string, 0, len(g.Fields))
-		fields         = make([]string, 0, len(g.Fields))
-		fieldsQuery    = make([]string, 0, len(g.Fields))
-		fieldsModel    = make([]string, 0, len(g.Fields))
-		fieldsOptional = make([]string, 0, len(g.Fields))
-		adaptInput     = make([]string, 0, len(g.Fields))
-		adaptData      = make([]string, 0, len(g.Fields))
-		adaptFilter    = make([]string, 0, len(g.Fields))
-		adaptValues    = make([]string, 0, len(g.Fields))
-		input          string
-		output         string
-	)
-
-	for key, field := range g.Fields {
-		pointer := "*"
-		if field.IsRequired {
-			pointer = ""
-		}
-
-		fields = append(fields, fmt.Sprintf("%s %s%s", key, pointer, field.Type))
-
-		gormNull := ""
-		if field.IsRequired {
-			gormNull = "`gorm:\"not null\"`"
-		}
-
-		fieldsModel = append(fieldsModel, fmt.Sprintf("%s %s %s", key, field.Type, gormNull))
-
-		fieldsQuery = append(fieldsQuery, fmt.Sprintf(`%s: ctx.Query("%s"),`, key, key))
-
-		fieldsOptional = append(fieldsOptional, fmt.Sprintf("%s *%s", key, field.Type))
-		filters = append(filters, fmt.Sprintf(`
-		if filter.%s != nil {
-			query = query.Where("%s = ?", filter.%s)
-		}`, key, utils.ToSnakeCase(key), key))
-	}
-
-	if g.OutputName == "interface" {
-		switch g.Type {
-		case "Paginate":
-			template = fmt.Sprintf(`%s
-
-			type PaginateFilter struct {
-				{{fields_optional}}
-			}
-
-			type PaginateData struct {
-				{{fields}}
-			}
-
-			type PaginateOutput struct {
-				Data     []PaginateData
-				MaxPages int
-			}`, template)
-
-		case "GetByID":
-			template = fmt.Sprintf(`%s
-
-			type GetByIDOutput struct {
-				{{fields}}
-			}`, template)
-
-		case "Delete":
-
-		default:
-			template = fmt.Sprintf(`%s
-			
-			type %sInput struct {
-				{{fields}}
-			}`, template, g.Type)
-		}
-	}
-
-	switch g.Type {
-	case "GetByID":
-		input = "id string"
-		output = "(*GetByIDOutput, error)"
-		for k := range g.Fields {
-			adaptData = append(adaptData, fmt.Sprintf("%s: data.%s,", k, k))
-		}
-
-	case "Delete":
-		input = "id string"
-		output = "(bool, error)"
-
-	case "Patch":
-
-	case "Paginate":
-		input = "filter PaginateFilter, paginate database.PaginateInput"
-		output = fmt.Sprintf("(*%sOutput, error)", g.Type)
-
-	default:
-		input = fmt.Sprintf("input %sInput", g.Type)
-		output = fmt.Sprintf("(%sOutput, error)", g.Type)
-	}
-
-	result := strings.ReplaceAll(template, "{{adapt_data}}", strings.Join(adaptData, "\n"))
-	result = strings.ReplaceAll(result, "{{adapt_input}}", strings.Join(adaptInput, "\n"))
-	result = strings.ReplaceAll(result, "{{adapt_filter}}", strings.Join(adaptFilter, "\n"))
-	result = strings.ReplaceAll(result, "{{adapt_values}}", strings.Join(adaptValues, "\n"))
-	result = strings.ReplaceAll(result, "{{filters}}", strings.Join(filters, "\n"))
-	result = strings.ReplaceAll(result, "{{fields}}", strings.Join(fields, "\n"))
-	result = strings.ReplaceAll(result, "{{fields_query}}", strings.Join(fieldsQuery, "\n"))
-	result = strings.ReplaceAll(result, "{{fields_model}}", strings.Join(fieldsModel, "\n"))
-	result = strings.ReplaceAll(result, "{{fields_optional}}", strings.Join(fieldsOptional, "\n"))
-	result = strings.ReplaceAll(result, "{{method_input}}", input)
-	result = strings.ReplaceAll(result, "{{method_output}}", output)
-
-	return result
+func (g *Generator) createPath() {
+	filePath := strings.Split(g.outputFile, "/")
+	onlyFolders := filePath[:len(filePath)-1]
+	err := os.MkdirAll(strings.Join(onlyFolders, "/"), config.Permission)
+	utils.PanicIfError(err)
 }
 
 func GenerateAdapter(name string) {
 	g := Generator{
-		Name:         name,
-		NamePlural:   "",
-		Type:         "",
-		TemplateName: config.AdapterTemplate,
-		OutputName:   "adapter",
-		Fields:       nil,
+		name:         name,
+		namePlural:   "",
+		templateName: config.AdapterTemplate,
+		outputFile:   fmt.Sprintf("adapters/gateways/%s_gateway/gorm_adapter.go", strings.ToLower(name)),
+		fields:       nil,
 	}
 
 	g.Generate()
@@ -217,25 +59,24 @@ func GenerateAdapter(name string) {
 
 func GenerateModel(name, namePlural string, fields map[string]Field) {
 	model := Generator{
-		Name:         name,
-		NamePlural:   namePlural,
-		Type:         "Model",
-		TemplateName: config.ModelTemplate,
-		OutputName:   fmt.Sprintf("%s_model", strings.ToLower(name)),
-		Fields:       fields,
+		name:         name,
+		namePlural:   namePlural,
+		templateName: config.ModelTemplate,
+		outputFile:   fmt.Sprintf("frameworks/database/gorm/models/%s_model.go", strings.ToLower(name)),
+		fields:       fields,
 	}
 
 	model.Generate()
 }
 
 func GenerateController(name, namePlural string, fields map[string]Field) {
+
 	g := Generator{
-		Name:         name,
-		NamePlural:   namePlural,
-		Type:         "Controller",
-		TemplateName: config.ControllerTemplate,
-		OutputName:   "controller_struct",
-		Fields:       fields,
+		name:         name,
+		namePlural:   namePlural,
+		templateName: config.ControllerTemplate,
+		outputFile:   fmt.Sprintf("adapters/controllers/%s_controller/controller_struct.go", strings.ToLower(name)),
+		fields:       fields,
 	}
 
 	g.Generate()
@@ -243,12 +84,11 @@ func GenerateController(name, namePlural string, fields map[string]Field) {
 
 func GenerateUseCase(name string, namePlural string, fields map[string]Field) {
 	g := Generator{
-		Name:         name,
-		NamePlural:   namePlural,
-		Type:         "Usecase",
-		TemplateName: "usecase",
-		OutputName:   "case_struct",
-		Fields:       fields,
+		name:         name,
+		namePlural:   namePlural,
+		templateName: "usecase",
+		outputFile:   fmt.Sprintf("usecases/%s_case/case_struct.go", strings.ToLower(name)),
+		fields:       fields,
 	}
 
 	g.Generate()
