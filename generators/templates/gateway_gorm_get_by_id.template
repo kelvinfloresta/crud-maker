@@ -5,8 +5,8 @@ import (
 )
 
 func (g Gorm{{name_capitalized}}GatewayAdapter) GetByID(id string) (*GetByIDOutput, error) {
-	data := &models.{{name_capitalized}}{}
-	result := g.DB.Conn.Limit(1).Find(data, "id = ?", id)
+	output := &models.{{name_capitalized}}{}
+	result := g.DB.Conn.Limit(1).Find(output, "id = ?", id)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -17,7 +17,7 @@ func (g Gorm{{name_capitalized}}GatewayAdapter) GetByID(id string) (*GetByIDOutp
 	}
 
 	adapted := GetByIDOutput{
-		{{adapt_data}}
+		{{adapt_output}}
 	}
 
 	return &adapted, nil

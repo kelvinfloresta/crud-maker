@@ -34,6 +34,7 @@ func ParseTemplate(input ParseTemplateInput) string {
 		adaptInput     = ""
 		adaptFilter    = ""
 		adaptValues    = ""
+		adaptOutput    = ""
 		filters        = ""
 		fieldsPointer  = ""
 		fieldsQuery    = ""
@@ -48,6 +49,7 @@ func ParseTemplate(input ParseTemplateInput) string {
 		fieldsOptional += fmt.Sprintf("%s *%s\n", fieldName, field.Type)
 		fieldsQuery += fmt.Sprintf("%s := ctx.Query(\"%s\")\n", fieldName, fieldName)
 		fieldsPointer += fmt.Sprintf(`%s: &%s,`, fieldName, fieldName)
+		adaptOutput += fmt.Sprintf("%s: output.%s,", fieldName, fieldName)
 
 		filters += fmt.Sprintf(`
 		if filter.%s != nil {
@@ -60,6 +62,7 @@ func ParseTemplate(input ParseTemplateInput) string {
 	template := strings.ReplaceAll(input.Template, "{{adapt_input}}", adaptInput)
 	template = strings.ReplaceAll(template, "{{adapt_filter}}", adaptFilter)
 	template = strings.ReplaceAll(template, "{{adapt_values}}", adaptValues)
+	template = strings.ReplaceAll(template, "{{adapt_output}}", adaptOutput)
 	template = strings.ReplaceAll(template, "{{fields}}", fields)
 	template = strings.ReplaceAll(template, "{{filters}}", filters)
 	template = strings.ReplaceAll(template, "{{fields_model}}", fieldsModel)
