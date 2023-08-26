@@ -6,7 +6,7 @@ import (
 )
 
 type ListInput struct {
-	{{fields}}
+	{{fields_optional}}
 }
 
 func (c {{name_capitalized}}Case) List(ctx context.Context, input ListInput) ([]g.ListOutput, error) {
