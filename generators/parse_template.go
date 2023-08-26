@@ -62,10 +62,10 @@ func parseField(fieldName string, field Field) string {
 }
 
 func parseModel(fieldName string, field Field) string {
-	gormNull := ""
+	isNullable := ""
 	if field.IsRequired {
-		gormNull = "`gorm:\"not null\"`"
+		isNullable = "`gorm:\"not null\"`"
 	}
 
-	return fmt.Sprintf("%s %s %s\n", fieldName, field.Type, gormNull)
+	return fmt.Sprintf("%s %s %s\n", fieldName, field.Type, isNullable)
 }
