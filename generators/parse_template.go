@@ -17,6 +17,15 @@ type ParseTemplateInput struct {
 	Fields       map[string]Field
 }
 
+func AppendMethodToInterface(template string) string {
+	return strings.Replace(
+		template,
+		"}",
+		"{{method_capitalized}}({{method_input}}) {{method_output}}\n}",
+		1,
+	)
+}
+
 func ParseTemplate(input ParseTemplateInput) string {
 	var (
 		fields         = ""
