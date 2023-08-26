@@ -25,6 +25,7 @@ func ParseTemplate(input ParseTemplateInput) string {
 		adaptInput     = ""
 		adaptFilter    = ""
 		adaptValues    = ""
+		filters        = ""
 	)
 
 	for fieldName, field := range input.Fields {
@@ -34,12 +35,18 @@ func ParseTemplate(input ParseTemplateInput) string {
 		adaptFilter += fmt.Sprintf("%s: filter.%s,", fieldName, fieldName)
 		adaptValues += fmt.Sprintf("%s: values.%s,", fieldName, fieldName)
 		fieldsOptional += fmt.Sprintf("%s *%s\n", fieldName, field.Type)
+		filters += fmt.Sprintf(`
+		if filter.%s != nil {
+			query = query.Where("%s = ?", filter.%s)
+		}
+		`, fieldName, utils.ToSnakeCase(fieldName), fieldName)
 	}
 
 	template := strings.ReplaceAll(input.Template, "{{adapt_input}}", adaptInput)
 	template = strings.ReplaceAll(template, "{{adapt_filter}}", adaptFilter)
 	template = strings.ReplaceAll(template, "{{adapt_values}}", adaptValues)
 	template = strings.ReplaceAll(template, "{{fields}}", fields)
+	template = strings.ReplaceAll(template, "{{filters}}", filters)
 	template = strings.ReplaceAll(template, "{{fields_model}}", fieldsModel)
 	template = strings.ReplaceAll(template, "{{fields_optional}}", fieldsOptional)
 	template = strings.ReplaceAll(template, "{{method_input}}", input.MethodInput)
