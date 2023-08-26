@@ -2,17 +2,18 @@ package main
 
 import (
 	"crud-maker/generators"
+	"crud-maker/generators/create"
+	delete_pkg "crud-maker/generators/delete"
+	"crud-maker/generators/get_by_id"
+	"crud-maker/generators/list"
+	"crud-maker/generators/paginate"
+	"crud-maker/generators/patch"
 	"crud-maker/prompts"
-	"crud-maker/utils"
 	"fmt"
-	"os"
 	"os/exec"
 )
 
 func main() {
-	err := os.RemoveAll("output")
-	generators.CheckError(err)
-
 	name := prompts.GetName()
 	namePlural := prompts.GetPlural(name)
 	fields := prompts.GetFields(nil)
@@ -20,59 +21,63 @@ func main() {
 
 	generators.GenerateModel(name, namePlural, fields)
 	generators.GenerateController(name, namePlural, fields)
-	generators.GenerateUsecase(name, namePlural, fields)
 	generators.GenerateAdapter(name)
+	generators.GenerateUseCase(name, namePlural, fields)
 
 	for _, method := range selecteds {
-		g := generators.Generator{
-			Name:         name,
-			NamePlural:   namePlural,
-			Type:         method,
-			TemplateName: "gateway_interface",
-			OutputName:   "interface",
-			Fields:       fields,
+		if method == "Create" {
+			create.NewCase(name, namePlural, fields).Generate()
+			create.NewGateway(name, namePlural, fields).Generate()
+			create.NewGatewayAdapter(name, namePlural, fields).Generate()
+			create.NewController(name, namePlural, fields).Generate()
+			continue
 		}
 
-		g.Generate()
-
-		methodSnakeCase := utils.ToSnakeCase(method)
-		g = generators.Generator{
-			Name:         name,
-			NamePlural:   namePlural,
-			Type:         method,
-			TemplateName: fmt.Sprintf("gateway_gorm_%s", methodSnakeCase),
-			OutputName:   fmt.Sprintf("gorm_%s", methodSnakeCase),
-			Fields:       fields,
+		if method == "List" {
+			list.NewCase(name, namePlural, fields).Generate()
+			list.NewGateway(name, namePlural, fields).Generate()
+			list.NewGatewayAdapter(name, namePlural, fields).Generate()
+			list.NewController(name, namePlural, fields).Generate()
+			continue
 		}
 
-		g.Generate()
-
-		g = generators.Generator{
-			Name:         name,
-			NamePlural:   namePlural,
-			Type:         method,
-			TemplateName: fmt.Sprintf("controller_fiber_%s", methodSnakeCase),
-			OutputName:   fmt.Sprintf("fiber_%s", methodSnakeCase),
-			Fields:       fields,
+		if method == "Patch" {
+			patch.NewCase(name, namePlural, fields).Generate()
+			patch.NewGateway(name, namePlural, fields).Generate()
+			patch.NewGatewayAdapter(name, namePlural, fields).Generate()
+			patch.NewController(name, namePlural, fields).Generate()
+			continue
 		}
 
-		g.Generate()
-
-		g = generators.Generator{
-			Name:         name,
-			NamePlural:   namePlural,
-			Type:         method,
-			TemplateName: fmt.Sprintf("case_%s", methodSnakeCase),
-			OutputName:   methodSnakeCase,
-			Fields:       fields,
+		if method == "Paginate" {
+			paginate.NewCase(name, namePlural, fields).Generate()
+			paginate.NewGateway(name, namePlural, fields).Generate()
+			paginate.NewGatewayAdapter(name, namePlural, fields).Generate()
+			paginate.NewController(name, namePlural, fields).Generate()
+			continue
 		}
 
-		g.Generate()
+		if method == "GetByID" {
+			get_by_id.NewCase(name, namePlural, fields).Generate()
+			get_by_id.NewGateway(name, namePlural, fields).Generate()
+			get_by_id.NewGatewayAdapter(name, namePlural, fields).Generate()
+			get_by_id.NewController(name, namePlural, fields).Generate()
+			continue
+		}
+
+		if method == "Delete" {
+			delete_pkg.NewCase(name, namePlural, fields).Generate()
+			delete_pkg.NewGateway(name, namePlural, fields).Generate()
+			delete_pkg.NewGatewayAdapter(name, namePlural, fields).Generate()
+			delete_pkg.NewController(name, namePlural, fields).Generate()
+			continue
+		}
+
 	}
 
 	fmt.Println("go fmt ./...")
 	cmd := exec.Command("go", "fmt", "./...")
-	err = cmd.Run()
+	err := cmd.Run()
 
 	if err != nil {
 		fmt.Println("\n** Error **")
