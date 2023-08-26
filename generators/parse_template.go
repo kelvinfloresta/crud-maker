@@ -21,18 +21,24 @@ func ParseTemplate(input ParseTemplateInput) string {
 	var (
 		fields         = ""
 		fieldsModel    = ""
-		adaptInput     = ""
 		fieldsOptional = ""
+		adaptInput     = ""
+		adaptFilter    = ""
+		adaptValues    = ""
 	)
 
 	for fieldName, field := range input.Fields {
 		fields += parseField(fieldName, field)
 		fieldsModel += parseModel(fieldName, field)
 		adaptInput += fmt.Sprintf("%s: input.%s,\n", fieldName, fieldName)
+		adaptFilter += fmt.Sprintf("%s: filter.%s,", fieldName, fieldName)
+		adaptValues += fmt.Sprintf("%s: values.%s,", fieldName, fieldName)
 		fieldsOptional += fmt.Sprintf("%s *%s\n", fieldName, field.Type)
 	}
 
 	template := strings.ReplaceAll(input.Template, "{{adapt_input}}", adaptInput)
+	template = strings.ReplaceAll(template, "{{adapt_filter}}", adaptFilter)
+	template = strings.ReplaceAll(template, "{{adapt_values}}", adaptValues)
 	template = strings.ReplaceAll(template, "{{fields}}", fields)
 	template = strings.ReplaceAll(template, "{{fields_model}}", fieldsModel)
 	template = strings.ReplaceAll(template, "{{fields_optional}}", fieldsOptional)
