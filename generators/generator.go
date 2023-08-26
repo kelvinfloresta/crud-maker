@@ -130,17 +130,6 @@ func (g Generator) generateMethods(template string) string {
 
 	if g.OutputName == "interface" {
 		switch g.Type {
-		case "Patch":
-			template = fmt.Sprintf(`%s
-
-			type PatchFilter struct {
-				{{fields_optional}}
-			}
-
-			type PatchValues struct {
-				{{fields}}
-			}`, template)
-
 		case "Paginate":
 			template = fmt.Sprintf(`%s
 
@@ -155,17 +144,6 @@ func (g Generator) generateMethods(template string) string {
 			type PaginateOutput struct {
 				Data     []PaginateData
 				MaxPages int
-			}`, template)
-
-		case "List":
-			template = fmt.Sprintf(`%s
-
-			type ListInput struct {
-				{{fields_optional}}
-			}
-
-			type ListOutput struct {
-				{{fields}}
 			}`, template)
 
 		case "GetByID":
@@ -187,13 +165,6 @@ func (g Generator) generateMethods(template string) string {
 	}
 
 	switch g.Type {
-	case "Create":
-		input = "input CreateInput"
-		output = "(string, error)"
-		for k := range g.Fields {
-			adaptInput = append(adaptInput, fmt.Sprintf("%s: input.%s,", k, k))
-		}
-
 	case "GetByID":
 		input = "id string"
 		output = "(*GetByIDOutput, error)"
@@ -206,20 +177,10 @@ func (g Generator) generateMethods(template string) string {
 		output = "(bool, error)"
 
 	case "Patch":
-		input = "filter PatchFilter, values PatchValues"
-		output = "(bool, error)"
-		for k := range g.Fields {
-			adaptFilter = append(adaptFilter, fmt.Sprintf("%s: filter.%s,", k, k))
-			adaptValues = append(adaptData, fmt.Sprintf("%s: values.%s,", k, k))
-		}
 
 	case "Paginate":
 		input = "filter PaginateFilter, paginate database.PaginateInput"
 		output = fmt.Sprintf("(*%sOutput, error)", g.Type)
-
-	case "List":
-		input = "input ListInput"
-		output = "([]ListOutput, error)"
 
 	default:
 		input = fmt.Sprintf("input %sInput", g.Type)
@@ -273,7 +234,20 @@ func GenerateController(name, namePlural string, fields map[string]Field) {
 		NamePlural:   namePlural,
 		Type:         "Controller",
 		TemplateName: config.ControllerTemplate,
-		OutputName:   strings.ToLower(name),
+		OutputName:   "controller_struct",
+		Fields:       fields,
+	}
+
+	g.Generate()
+}
+
+func GenerateUseCase(name string, namePlural string, fields map[string]Field) {
+	g := Generator{
+		Name:         name,
+		NamePlural:   namePlural,
+		Type:         "Usecase",
+		TemplateName: "usecase",
+		OutputName:   "case_struct",
 		Fields:       fields,
 	}
 
