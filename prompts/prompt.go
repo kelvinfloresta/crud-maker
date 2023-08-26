@@ -2,6 +2,7 @@ package prompts
 
 import (
 	"crud-maker/generators"
+	"crud-maker/utils"
 	"errors"
 	"fmt"
 
@@ -21,7 +22,7 @@ func GetName() string {
 	}
 
 	name, err := promptName.Run()
-	generators.CheckError(err)
+	utils.PanicIfError(err)
 
 	return name
 }
@@ -39,7 +40,7 @@ func GetFieldName() string {
 	}
 
 	name, err := prompt.Run()
-	generators.CheckError(err)
+	utils.PanicIfError(err)
 
 	return name
 }
@@ -58,7 +59,7 @@ func GetPlural(name string) string {
 	}
 
 	namePlural, err := promptNamePlural.Run()
-	generators.CheckError(err)
+	utils.PanicIfError(err)
 
 	return namePlural
 }
@@ -85,7 +86,7 @@ func GetMethods(selecteds []string) []string {
 	}
 
 	_, method, err := promptMethod.Run()
-	generators.CheckError(err)
+	utils.PanicIfError(err)
 
 	if method == "Finish" {
 		return selecteds
@@ -130,7 +131,7 @@ func GetFields(fields map[string]generators.Field) map[string]generators.Field {
 	}
 
 	_, fieldType, err := promptFieldType.Run()
-	generators.CheckError(err)
+	utils.PanicIfError(err)
 
 	if fieldType == "Finish" {
 		return fields
@@ -154,7 +155,7 @@ func GetFieldRequired() bool {
 	}
 
 	_, answer, err := prompt.Run()
-	generators.CheckError(err)
+	utils.PanicIfError(err)
 
 	return answer == "Yes"
 }
