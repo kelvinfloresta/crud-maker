@@ -1,7 +1,6 @@
 package generators
 
 import (
-	"crud-maker/config"
 	"crud-maker/utils"
 	"fmt"
 	"strings"
@@ -75,7 +74,7 @@ func ParseTemplate(input ParseTemplateInput) string {
 	template = strings.ReplaceAll(template, "{{name_plural}}", utils.ToSnakeCase(input.NamePlural))
 	template = strings.ReplaceAll(template, "{{fields_pointer}}", fieldsPointer)
 	template = strings.ReplaceAll(template, "{{fields_query}}", fieldsQuery)
-	template = strings.ReplaceAll(template, "{{project_name}}", config.ProjectName)
+	template = strings.ReplaceAll(template, "{{project_name}}", utils.ProjectName)
 	return template
 }
 
