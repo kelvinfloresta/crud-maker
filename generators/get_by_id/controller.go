@@ -10,7 +10,7 @@ import (
 type GetByIDController struct {
 	name       string
 	namePlural string
-	outputPath string
+	outputFile string
 	fields     map[string]generators.Field
 }
 
@@ -19,7 +19,7 @@ func NewController(name, namePlural string, fields map[string]generators.Field) 
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputPath: fmt.Sprintf("adapters/controllers/%s_controller/fiber_get_by_id.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("adapters/controllers/%s_controller/fiber_get_by_id.go", strings.ToLower(name)),
 	}
 }
 
@@ -36,5 +36,5 @@ func (c GetByIDController) Generate() {
 		MethodOutput: "(*GetByIDOutput, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputPath)
+	utils.WriteTemplate(template, c.outputFile)
 }

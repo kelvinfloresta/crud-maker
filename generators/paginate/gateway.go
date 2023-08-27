@@ -10,7 +10,7 @@ import (
 type PaginateGateway struct {
 	name       string
 	namePlural string
-	outputPath string
+	outputFile string
 	fields     map[string]generators.Field
 }
 
@@ -19,12 +19,12 @@ func NewGateway(name, namePlural string, fields map[string]generators.Field) *Pa
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputPath: fmt.Sprintf("adapters/gateways/%s_gateway/interface.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("adapters/gateways/%s_gateway/interface.go", strings.ToLower(name)),
 	}
 }
 
 func (c PaginateGateway) Generate() {
-	template, fileExist := utils.ReadExistingFile(c.outputPath)
+	template, fileExist := utils.ReadExistingFile(c.outputFile)
 	if fileExist {
 		template = generators.AppendMethodToInterface(template)
 	} else {
@@ -56,5 +56,5 @@ func (c PaginateGateway) Generate() {
 		MethodOutput: "(*PaginateOutput, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputPath)
+	utils.WriteTemplate(template, c.outputFile)
 }

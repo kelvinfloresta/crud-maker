@@ -10,7 +10,7 @@ import (
 type GetByIDCase struct {
 	name       string
 	namePlural string
-	outputPath string
+	outputFile string
 	fields     map[string]generators.Field
 }
 
@@ -19,7 +19,7 @@ func NewCase(name, namePlural string, fields map[string]generators.Field) GetByI
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputPath: fmt.Sprintf("usecases/%s_case/get_by_id.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("usecases/%s_case/get_by_id.go", strings.ToLower(name)),
 	}
 }
 
@@ -36,5 +36,5 @@ func (c GetByIDCase) Generate() {
 		MethodOutput: "(*GetByIDOutput, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputPath)
+	utils.WriteTemplate(template, c.outputFile)
 }

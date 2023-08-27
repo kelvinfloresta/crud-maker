@@ -10,7 +10,7 @@ import (
 type PatchCase struct {
 	name       string
 	namePlural string
-	outputPath string
+	outputFile string
 	fields     map[string]generators.Field
 }
 
@@ -19,7 +19,7 @@ func NewCase(name, namePlural string, fields map[string]generators.Field) PatchC
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputPath: fmt.Sprintf("usecases/%s_case/patch.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("usecases/%s_case/patch.go", strings.ToLower(name)),
 	}
 }
 
@@ -36,5 +36,5 @@ func (c PatchCase) Generate() {
 		MethodOutput: "(bool, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputPath)
+	utils.WriteTemplate(template, c.outputFile)
 }
