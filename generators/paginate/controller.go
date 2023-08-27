@@ -19,7 +19,7 @@ func NewController(name, namePlural string, fields map[string]generators.Field) 
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputFile: fmt.Sprintf("adapters/controllers/%s_controller/fiber_paginate.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("frameworks/http/fiber/controllers/%s_controller/fiber_paginate.go", strings.ToLower(name)),
 	}
 }
 

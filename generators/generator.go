@@ -75,7 +75,7 @@ func GenerateController(name, namePlural string, fields map[string]Field) {
 		name:         name,
 		namePlural:   namePlural,
 		templateName: config.ControllerTemplate,
-		outputFile:   fmt.Sprintf("adapters/controllers/%s_controller/controller_struct.go", strings.ToLower(name)),
+		outputFile:   fmt.Sprintf("frameworks/http/fiber/controllers/%s_controller/controller_struct.go", strings.ToLower(name)),
 		fields:       fields,
 	}
 
