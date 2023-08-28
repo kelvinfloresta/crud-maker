@@ -4,7 +4,6 @@ import (
 	"crud-maker/config"
 	"crud-maker/utils"
 	"fmt"
-	"os"
 	"strings"
 )
 
@@ -34,15 +33,7 @@ func (g *Generator) Generate() {
 		Fields:       g.fields,
 	})
 
-	g.createPath()
 	utils.WriteTemplate(parsed, g.outputFile)
-}
-
-func (g *Generator) createPath() {
-	filePath := strings.Split(g.outputFile, "/")
-	onlyFolders := filePath[:len(filePath)-1]
-	err := os.MkdirAll(strings.Join(onlyFolders, "/"), config.Permission)
-	utils.PanicIfError(err)
 }
 
 func GenerateAdapter(name string) {
