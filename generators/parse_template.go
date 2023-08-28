@@ -87,8 +87,8 @@ func ParseTemplate(input ParseTemplateInput) string {
 	template = strings.ReplaceAll(template, "{{project_name}}", utils.ProjectName)
 	template = strings.ReplaceAll(template, "{{http_method}}", utils.GetHTTPMethod(input.MethodName))
 	template = strings.ReplaceAll(template, "{{http_framework_capitalized}}", strings.Title(config.HTTPFramework))
-	template = strings.ReplaceAll(template, "{{routes}}", fmt.Sprintf("routes.%s(app, di.New%s())", input.Name, input.Name))
-
+	template = strings.ReplaceAll(template, "{{routes}}", fmt.Sprintf("routes.%s(app, factories.New%s())", input.Name, input.Name))
+	template = strings.ReplaceAll(template, "{{database_framework}}", config.DatabaseFramework)
 	return template
 }
 

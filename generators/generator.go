@@ -96,3 +96,15 @@ func GenerateHTTPAdapter(name string, namePlural string, fields map[string]Field
 
 	g.Generate()
 }
+
+func GenerateFactory(name string, namePlural string, fields map[string]Field) {
+	g := Generator{
+		name:         name,
+		namePlural:   namePlural,
+		templateName: "factory",
+		outputFile:   fmt.Sprintf("factories/%s.go", name),
+		fields:       fields,
+	}
+
+	g.Generate()
+}

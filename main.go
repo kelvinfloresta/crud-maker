@@ -24,6 +24,7 @@ func main() {
 	generators.GenerateAdapter(name)
 	generators.GenerateUseCase(name, namePlural, fields)
 	generators.GenerateHTTPAdapter(name, namePlural, fields)
+	generators.GenerateFactory(name, namePlural, fields)
 
 	generators.GenerateStatic("http_interface", "adapters/http/interface.go")
 	generators.GenerateStatic("http_singleton", "adapters/http/singleton.go")
