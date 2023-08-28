@@ -1,6 +1,7 @@
 package generators
 
 import (
+	"crud-maker/config"
 	"crud-maker/utils"
 	"fmt"
 	"strings"
@@ -21,6 +22,15 @@ func AppendMethodToInterface(template string) string {
 		template,
 		"}",
 		"{{method_capitalized}}({{method_input}}) {{method_output}}\n}",
+		1,
+	)
+}
+
+func AppendRoute(template string) string {
+	return strings.Replace(
+		template,
+		"}",
+		`route.{{http_method}}("/", c.{{method_capitalized}})}`,
 		1,
 	)
 }
@@ -75,6 +85,10 @@ func ParseTemplate(input ParseTemplateInput) string {
 	template = strings.ReplaceAll(template, "{{fields_pointer}}", fieldsPointer)
 	template = strings.ReplaceAll(template, "{{fields_query}}", fieldsQuery)
 	template = strings.ReplaceAll(template, "{{project_name}}", utils.ProjectName)
+	template = strings.ReplaceAll(template, "{{http_method}}", utils.GetHTTPMethod(input.MethodName))
+	template = strings.ReplaceAll(template, "{{http_framework_capitalized}}", strings.Title(config.HTTPFramework))
+	template = strings.ReplaceAll(template, "{{routes}}", fmt.Sprintf("routes.%s(app, di.New%s())", input.Name, input.Name))
+
 	return template
 }
 

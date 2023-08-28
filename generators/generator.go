@@ -84,3 +84,15 @@ func GenerateUseCase(name string, namePlural string, fields map[string]Field) {
 
 	g.Generate()
 }
+
+func GenerateHTTPAdapter(name string, namePlural string, fields map[string]Field) {
+	g := Generator{
+		name:         name,
+		namePlural:   namePlural,
+		templateName: "adapter_fiber",
+		outputFile:   fmt.Sprintf("adapters/http/%s_adapter.go", config.HTTPFramework),
+		fields:       fields,
+	}
+
+	g.Generate()
+}

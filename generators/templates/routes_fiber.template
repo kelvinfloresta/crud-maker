@@ -1,0 +1,12 @@
+package routes
+
+import (
+	"{{project_name}}/frameworks/http/fiber/controllers/{{name}}_controller"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func {{name_capitalized}}(app *fiber.App, c *{{name}}_controller.{{name_capitalized}}Controller) {
+	route := app.Group("/{{name}}")
+	route.{{http_method}}("/", c.{{method_capitalized}})
+}

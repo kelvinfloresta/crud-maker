@@ -1,0 +1,3 @@
+package http
+
+var Singleton = new{{http_framework_capitalized}}()

@@ -1,0 +1,34 @@
+package http
+
+import (
+	fiber_framework "{{project_name}}/frameworks/http/fiber"
+	"{{project_name}}/frameworks/http/fiber/routes"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
+)
+
+type fiberAdapter struct {
+	app *fiber.App
+}
+
+func (f *fiberAdapter) Start(port string) error {
+	return f.app.Listen(":" + port)
+}
+
+func newFiber() HTTPServer {
+	app := fiber.New(fiber.Config{
+		Immutable: true,
+	})
+
+	app.Use(
+		cors.New(),
+	).Use(
+		requestid.New(),
+	)
+
+	{{routes}}
+
+	return &fiberAdapter{app}
+}
