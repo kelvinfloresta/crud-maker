@@ -1,13 +1,16 @@
 package config
 
 import (
+	"fmt"
 	"io/fs"
 )
 
 var (
+	HTTPFramework      = "fiber"
+	DatabaseFramework  = "gorm"
 	TemplatePath       = "generators/templates/"
-	AdapterTemplate    = "gateway_gorm_adapter"
-	ModelTemplate      = "gorm_model"
-	ControllerTemplate = "controller_fiber"
+	AdapterTemplate    = fmt.Sprintf("gateway_%s_adapter", DatabaseFramework)
+	ModelTemplate      = fmt.Sprintf("%s_model", DatabaseFramework)
+	ControllerTemplate = fmt.Sprintf("controller_%s", HTTPFramework)
 	Permission         = fs.FileMode(0777)
 )
