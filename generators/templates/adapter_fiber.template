@@ -1,7 +1,6 @@
 package http
 
 import (
-	fiber_framework "{{project_name}}/frameworks/http/fiber"
 	"{{project_name}}/frameworks/http/fiber/routes"
 
 	"github.com/gofiber/fiber/v2"
