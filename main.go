@@ -80,18 +80,14 @@ func main() {
 			delete_pkg.NewController(name, namePlural, fields).Generate()
 			continue
 		}
-
 	}
 
-	fmt.Println("go fmt ./...")
-	cmd := exec.Command("go", "fmt", "./...")
-	err := cmd.Run()
+	fmt.Print("\n")
+	fmt.Println("Files generated!")
+	fmt.Print("\n")
 
-	if err != nil {
-		fmt.Println("\n** Error **")
-		fmt.Println(err)
-		return
-	}
+	utils.FormatCode()
+	utils.GoModTidy()
 
-	fmt.Println("Done!")
+	fmt.Println("\nDone!")
 }
