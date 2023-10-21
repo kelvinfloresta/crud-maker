@@ -8,3 +8,8 @@ clean:
 e2e:
 	make clean
 	make
+
+build-template:
+	go-bindata -o utils/bindata.go generators/templates/
+	@echo ""
+	@echo "Rename the package name at utils/bindata.go"
