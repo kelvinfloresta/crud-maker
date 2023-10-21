@@ -9,8 +9,8 @@ import (
 	"crud-maker/generators/paginate"
 	"crud-maker/generators/patch"
 	"crud-maker/prompts"
+	"crud-maker/utils"
 	"fmt"
-	"os/exec"
 )
 
 func main() {
@@ -27,7 +27,6 @@ func main() {
 	generators.GenerateFactory(name, namePlural, fields)
 
 	generators.GenerateStatic("http_interface", "adapters/http/interface.go")
-	generators.GenerateStatic("http_singleton", "adapters/http/singleton.go")
 	generators.GenerateStatic("parse_body_fiber", "frameworks/http/fiber/parser/parse_body.go")
 	routeGenerator := generators.NewRoute(name, namePlural, fields)
 

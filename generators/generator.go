@@ -102,7 +102,7 @@ func GenerateFactory(name string, namePlural string, fields map[string]Field) {
 		name:         name,
 		namePlural:   namePlural,
 		templateName: "factory",
-		outputFile:   fmt.Sprintf("factories/%s.go", name),
+		outputFile:   fmt.Sprintf("factories/%s_controller.go", strings.ToLower(name)),
 		fields:       fields,
 	}
 

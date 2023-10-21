@@ -1,71 +1,13 @@
 package parser
 
 import (
-	"errors"
-	"fmt"
-
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
-
-type ErrorResponse struct {
-	FailedField string
-	Tag         string
-	Value       string
-}
-
-var validate = validator.New()
-
-func validateStruct(s interface{}) []*ErrorResponse {
-	err := validate.Struct(s)
-
-	if err == nil {
-		return nil
-	}
-
-	var errors []*ErrorResponse
-	for _, err := range err.(validator.ValidationErrors) {
-		e := &ErrorResponse{
-			FailedField: err.Field(),
-			Tag:         err.Tag(),
-			Value:       err.Param(),
-		}
-
-		errors = append(errors, e)
-	}
-
-	return errors
-}
-
-func parseErrorResponse(errs []*ErrorResponse) error {
-	var errMsg string
-	lastIndex := len(errs) - 1
-
-	for i, err := range errs {
-		errMsg += fmt.Sprintf(
-			"[%s]: '%v' | Needs to implement '%s'",
-			err.FailedField,
-			err.Value,
-			err.Tag,
-		)
-
-		if lastIndex != i {
-			errMsg += " and "
-		}
-	}
-
-	return errors.New(errMsg)
-}
 
 func ParseBody(c *fiber.Ctx, data interface{}) error {
 	if err := c.BodyParser(data); err != nil {
 		c.Status(fiber.StatusBadRequest)
 		return err
-	}
-
-	if err := validateStruct(data); err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return parseErrorResponse(err)
 	}
 
 	return nil

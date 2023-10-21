@@ -47,5 +47,5 @@ func (c CreateGateway) Generate() {
 		MethodOutput: "(string, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputFile)
+	utils.OverwriteTemplate(template, c.outputFile)
 }

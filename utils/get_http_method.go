@@ -2,9 +2,7 @@ package utils
 
 func GetHTTPMethod(method string) string {
 	switch method {
-	case "GetByID":
-	case "Paginate":
-	case "List":
+	case "GetByID", "Paginate", "List":
 		return "Get"
 
 	case "Create":
@@ -15,7 +13,6 @@ func GetHTTPMethod(method string) string {
 
 	case "Delete":
 		return "Delete"
-
 	}
 
 	return ""

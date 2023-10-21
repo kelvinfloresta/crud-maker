@@ -1,14 +1,20 @@
 package factories
 
 import (
-	c "{{project_name}}/frameworks/http/fiber/controllers/{{name}}_controller"
+	"{{project_name}}/adapters/database"
 	g "{{project_name}}/adapters/gateways/{{name}}_gateway"
-	database_adapter "{{project_name}}/frameworks/database/{{database_framework}}"
+	c "{{project_name}}/frameworks/http/fiber/controllers/{{name}}_controller"
+
 	"{{project_name}}/usecases/{{name}}_case"
 )
 
-func New{{name_capitalized}}() *c.{{name_capitalized}}Controller {
-	gateway := &g.Gorm{{name_capitalized}}GatewayAdapter{DB: database_adapter.DB_Production}
+func New{{name_capitalized}}(d database.Database) *c.{{name_capitalized}}Controller {
+	DB, ok := d.(*database.GormAdapter)
+	if !ok {
+		panic(ErrDatabaseAdapter)
+	}
+
+	gateway := &g.Gorm{{name_capitalized}}GatewayAdapter{DB: DB}
 	usecase := {{name}}_case.New(gateway)
 	return c.New(usecase)
 }

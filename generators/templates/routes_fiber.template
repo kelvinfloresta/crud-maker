@@ -8,5 +8,5 @@ import (
 
 func {{name_capitalized}}(app *fiber.App, c *{{name}}_controller.{{name_capitalized}}Controller) {
 	route := app.Group("/{{name}}")
-	route.{{http_method}}("/", c.{{method_capitalized}})
+	route.{{http_method}}({{endpoint}}, c.{{method_capitalized}})
 }

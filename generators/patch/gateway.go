@@ -34,6 +34,7 @@ func (c PatchGateway) Generate() {
 	template = fmt.Sprintf(`%s
 
 	type PatchFilter struct {
+		ID *string
 		{{fields_optional}}
 	}
 
@@ -51,5 +52,5 @@ func (c PatchGateway) Generate() {
 		MethodOutput: "(bool, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputFile)
+	utils.OverwriteTemplate(template, c.outputFile)
 }

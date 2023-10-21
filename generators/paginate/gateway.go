@@ -56,5 +56,5 @@ func (c PaginateGateway) Generate() {
 		MethodOutput: "(*PaginateOutput, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputFile)
+	utils.OverwriteTemplate(template, c.outputFile)
 }

@@ -40,5 +40,5 @@ func (c RouteGenerator) Generate(methodName string) {
 		MethodOutput: "",
 	})
 
-	utils.WriteTemplate(template, c.outputFile)
+	utils.OverwriteTemplate(template, c.outputFile)
 }

@@ -51,5 +51,5 @@ func (c ListGateway) Generate() {
 		MethodOutput: "([]ListOutput, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputFile)
+	utils.OverwriteTemplate(template, c.outputFile)
 }

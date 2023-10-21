@@ -2,14 +2,13 @@ package {{name}}_controller
 
 import (
 	"{{project_name}}/usecases/{{name}}_case"
-	"{{project_name}}/frameworks/http/fiber/parser"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func (c {{name_capitalized}}Controller) Create(ctx *fiber.Ctx) error {
 	data := &{{name}}_case.CreateInput{}
-	if err := parser.ParseBody(ctx, data); err != nil {
+	if err := ctx.BodyParser(data); err != nil {
 		return ctx.JSON(err)
 	}
 
@@ -19,5 +18,5 @@ func (c {{name_capitalized}}Controller) Create(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.SendString(id)
+	return ctx.Status(201).SendString(id)
 }

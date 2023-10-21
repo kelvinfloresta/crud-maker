@@ -47,5 +47,5 @@ func (c GetByIDGateway) Generate() {
 		MethodOutput: "(*GetByIDOutput, error)",
 	})
 
-	utils.WriteTemplate(template, c.outputFile)
+	utils.OverwriteTemplate(template, c.outputFile)
 }

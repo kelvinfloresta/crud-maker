@@ -6,6 +6,7 @@ import (
 )
 
 type PatchFilter struct {
+	ID *string
 	{{fields_optional}}
 }
 
@@ -14,9 +15,11 @@ type PatchValues struct {
 }
 
 func (c {{name_capitalized}}Case) Patch(ctx context.Context, filter PatchFilter, values PatchValues) (bool, error) {
-	return c.gateway.Patch(g.PatchFilter{
-		{{adapt_filter}}
-	}, g.PatchValues{
-		{{adapt_values}}
-	},)
+	return c.gateway.Patch(
+		g.PatchFilter{
+			ID: filter.ID,
+			{{adapt_filter}}
+		}, g.PatchValues{
+			{{adapt_values}}
+		})
 }

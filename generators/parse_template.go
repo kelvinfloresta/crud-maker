@@ -29,8 +29,9 @@ func AppendMethodToInterface(template string) string {
 func AppendRoute(template string) string {
 	return strings.Replace(
 		template,
-		"}",
-		`route.{{http_method}}("/", c.{{method_capitalized}})}`,
+		"\")",
+		`")
+		route.{{http_method}}({{endpoint}}, c.{{method_capitalized}})`,
 		1,
 	)
 }
@@ -86,6 +87,7 @@ func ParseTemplate(input ParseTemplateInput) string {
 	template = strings.ReplaceAll(template, "{{fields_query}}", fieldsQuery)
 	template = strings.ReplaceAll(template, "{{project_name}}", utils.ProjectName)
 	template = strings.ReplaceAll(template, "{{http_method}}", utils.GetHTTPMethod(input.MethodName))
+	template = strings.ReplaceAll(template, "{{endpoint}}", utils.GetEndpoint(input.MethodName))
 	template = strings.ReplaceAll(template, "{{http_framework_capitalized}}", strings.Title(config.HTTPFramework))
 	template = strings.ReplaceAll(template, "{{routes}}", fmt.Sprintf("routes.%s(app, factories.New%s())", input.Name, input.Name))
 	template = strings.ReplaceAll(template, "{{database_framework}}", config.DatabaseFramework)

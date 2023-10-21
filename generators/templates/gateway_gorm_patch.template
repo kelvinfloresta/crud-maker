@@ -5,6 +5,14 @@ import (
 )
 
 func (g Gorm{{name_capitalized}}GatewayAdapter) Patch(filter PatchFilter, newValues PatchValues) (bool, error) {
-	result := g.DB.Conn.Model(&models.{{name_capitalized}}{}).Select("*").Updates(newValues)
+	query := g.DB.Conn.Model(&models.{{name_capitalized}}{})
+
+	if filter.ID != nil {
+		query = query.Where("id = ?", filter.ID)
+	} else {
+		{{filters}}
+	}
+
+	result := query.Updates(newValues)
 	return result.RowsAffected > 0, result.Error
 }
