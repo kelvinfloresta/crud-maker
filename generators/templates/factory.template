@@ -1,15 +1,15 @@
 package factories
 
 import (
-	"{{project_name}}/adapters/database"
-	g "{{project_name}}/adapters/gateways/{{name}}_gateway"
-	c "{{project_name}}/frameworks/http/fiber/controllers/{{name}}_controller"
+	"{{project_name}}/frameworks/database"
+	g "{{project_name}}/frameworks/database/gateways/{{name}}_gateway"
+	c "{{project_name}}/frameworks/http/controllers/{{name}}_controller"
 
 	"{{project_name}}/usecases/{{name}}_case"
 )
 
 func New{{name_capitalized}}(d database.Database) *c.{{name_capitalized}}Controller {
-	DB, ok := d.(*database.GormAdapter)
+	DB, ok := d.(*gorm_adapter.GormAdapter)
 	if !ok {
 		panic(ErrDatabaseAdapter)
 	}

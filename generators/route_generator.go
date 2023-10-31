@@ -18,7 +18,7 @@ func NewRoute(name, namePlural string, fields map[string]Field) *RouteGenerator 
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputFile: fmt.Sprintf("frameworks/http/fiber/routes/%s_routes.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("frameworks/http/routes/%s_routes.go", strings.ToLower(name)),
 	}
 }
 

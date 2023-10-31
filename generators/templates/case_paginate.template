@@ -3,7 +3,7 @@ package {{name}}_case
 import (
 	"context"
 	database "{{project_name}}/frameworks/database/gorm"
-	g "{{project_name}}/adapters/gateways/{{name}}_gateway"
+	g "{{project_name}}/frameworks/database/gateways/{{name}}_gateway"
 )
 
 type PaginateFilter struct {

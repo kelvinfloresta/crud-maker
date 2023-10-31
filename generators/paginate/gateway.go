@@ -4,7 +4,6 @@ import (
 	"crud-maker/generators"
 	"crud-maker/utils"
 	"fmt"
-	"strings"
 )
 
 type PaginateGateway struct {
@@ -19,7 +18,7 @@ func NewGateway(name, namePlural string, fields map[string]generators.Field) *Pa
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputFile: fmt.Sprintf("adapters/gateways/%s_gateway/interface.go", strings.ToLower(name)),
+		outputFile: "frameworks/database/interface.go",
 	}
 }
 

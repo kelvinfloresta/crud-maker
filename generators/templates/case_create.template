@@ -2,7 +2,7 @@ package {{name}}_case
 
 import (
 	"context"
-	g "{{project_name}}/adapters/gateways/{{name}}_gateway"
+	g "{{project_name}}/frameworks/database/gateways/{{name}}_gateway"
 )
 
 type CreateInput struct {

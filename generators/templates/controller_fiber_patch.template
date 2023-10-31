@@ -1,7 +1,7 @@
 package {{name}}_controller
 
 import (
-	"{{project_name}}/frameworks/http/fiber/parser"
+	"{{project_name}}/frameworks/http/fiber_adapter/parser"
 	"{{project_name}}/usecases/{{name}}_case"
 
 	"github.com/gofiber/fiber/v2"

@@ -21,13 +21,12 @@ func main() {
 
 	generators.GenerateModel(name, namePlural, fields)
 	generators.GenerateController(name, namePlural, fields)
-	generators.GenerateAdapter(name)
+	generators.GenerateDatabaseAdapter(name)
 	generators.GenerateUseCase(name, namePlural, fields)
 	generators.GenerateHTTPAdapter(name, namePlural, fields)
 	generators.GenerateFactory(name, namePlural, fields)
-
-	generators.GenerateStatic("http_interface", "adapters/http/interface.go")
-	generators.GenerateStatic("parse_body_fiber", "frameworks/http/fiber/parser/parse_body.go")
+	generators.GenerateStatic("http_interface", "frameworks/http/interface.go")
+	generators.GenerateStatic("parse_body_fiber", "frameworks/http/fiber_adapter/parser/parse_body.go")
 	routeGenerator := generators.NewRoute(name, namePlural, fields)
 
 	for _, method := range selecteds {

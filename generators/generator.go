@@ -36,12 +36,12 @@ func (g *Generator) Generate() {
 	utils.WriteTemplate(parsed, g.outputFile)
 }
 
-func GenerateAdapter(name string) {
+func GenerateDatabaseAdapter(name string) {
 	g := Generator{
 		name:         name,
 		namePlural:   "",
 		templateName: config.AdapterTemplate,
-		outputFile:   fmt.Sprintf("adapters/gateways/%s_gateway/gorm_adapter.go", strings.ToLower(name)),
+		outputFile:   fmt.Sprintf("frameworks/database/gateways/%s_gateway/%s_adapter.go", strings.ToLower(name), config.DatabaseFramework),
 		fields:       nil,
 	}
 
@@ -53,7 +53,7 @@ func GenerateModel(name, namePlural string, fields map[string]Field) {
 		name:         name,
 		namePlural:   namePlural,
 		templateName: config.ModelTemplate,
-		outputFile:   fmt.Sprintf("frameworks/database/gorm/models/%s_model.go", strings.ToLower(name)),
+		outputFile:   fmt.Sprintf("frameworks/database/%s_adapter/models/%s_model.go", config.DatabaseFramework, strings.ToLower(name)),
 		fields:       fields,
 	}
 
@@ -66,7 +66,7 @@ func GenerateController(name, namePlural string, fields map[string]Field) {
 		name:         name,
 		namePlural:   namePlural,
 		templateName: config.ControllerTemplate,
-		outputFile:   fmt.Sprintf("frameworks/http/fiber/controllers/%s_controller/controller_struct.go", strings.ToLower(name)),
+		outputFile:   fmt.Sprintf("frameworks/http/controllers/%s_controller/controller_struct.go", strings.ToLower(name)),
 		fields:       fields,
 	}
 
@@ -89,8 +89,8 @@ func GenerateHTTPAdapter(name string, namePlural string, fields map[string]Field
 	g := Generator{
 		name:         name,
 		namePlural:   namePlural,
-		templateName: "adapter_fiber",
-		outputFile:   fmt.Sprintf("adapters/http/%s_adapter.go", config.HTTPFramework),
+		templateName: fmt.Sprintf("adapter_%s", config.HTTPFramework),
+		outputFile:   fmt.Sprintf("frameworks/http/%s_adapter/%s_adapter.go", config.HTTPFramework, config.HTTPFramework),
 		fields:       fields,
 	}
 
