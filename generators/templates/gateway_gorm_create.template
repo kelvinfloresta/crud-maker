@@ -1,7 +1,7 @@
 package {{name}}_gateway
 
 import (
-	"{{project_name}}/frameworks/database/gorm/models"
+	"{{project_name}}/frameworks/database/gorm_adapter/models"
 
 	"github.com/google/uuid"
 )
