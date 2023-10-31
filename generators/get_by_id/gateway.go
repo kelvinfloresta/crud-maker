@@ -4,6 +4,7 @@ import (
 	"crud-maker/generators"
 	"crud-maker/utils"
 	"fmt"
+	"strings"
 )
 
 type GetByIDGateway struct {
@@ -18,7 +19,7 @@ func NewGateway(name, namePlural string, fields map[string]generators.Field) *Ge
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputFile: "frameworks/database/interface.go",
+		outputFile: fmt.Sprintf("frameworks/database/gateways/%s_gateway/interface.go", strings.ToLower(name)),
 	}
 }
 
