@@ -2,7 +2,7 @@ package {{name}}_case
 
 import (
 	"context"
-	database "{{project_name}}/frameworks/database/gorm"
+	"{{project_name}}/frameworks/database/gorm_adapter"
 	g "{{project_name}}/frameworks/database/gateways/{{name}}_gateway"
 )
 
