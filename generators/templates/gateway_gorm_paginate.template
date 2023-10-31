@@ -1,6 +1,7 @@
 package {{name}}_gateway
 
 import (
+	"{{project_name}}/frameworks/database"
 	"{{project_name}}/frameworks/database/gorm_adapter"
 	"{{project_name}}/frameworks/database/gorm_adapter/models"
 )
@@ -25,7 +26,7 @@ func (g Gorm{{name_capitalized}}GatewayAdapter) Paginate(filter PaginateFilter, 
 		}, nil
 	}
 
-	database.Paginate(query, paginate)
+	gorm_adapter.Paginate(query, paginate)
 
 	result = query.Scan(&data)
 
