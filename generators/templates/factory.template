@@ -1,10 +1,10 @@
 package factories
 
 import (
-	"{{project_name}}/frameworks/database"
-	g "{{project_name}}/frameworks/database/gateways/{{name}}_gateway"
-	c "{{project_name}}/frameworks/http/controllers/{{name}}_controller"
-	"{{project_name}}/frameworks/database/gorm_adapter"
+	"{{project_name}}/libs/database"
+	g "{{project_name}}/libs/database/gateways/{{name}}_gateway"
+	c "{{project_name}}/libs/http/controllers/{{name}}_controller"
+	"{{project_name}}/libs/database/gorm_adapter"
 
 	"{{project_name}}/usecases/{{name}}_case"
 )

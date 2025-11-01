@@ -19,7 +19,7 @@ func NewGateway(name, namePlural string, fields map[string]generators.Field) *Ge
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputFile: fmt.Sprintf("frameworks/database/gateways/%s_gateway/interface.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("libs/database/gateways/%s_gateway/interface.go", strings.ToLower(name)),
 	}
 }
 

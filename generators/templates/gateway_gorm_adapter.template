@@ -1,6 +1,6 @@
 package {{name}}_gateway
 
-import "{{project_name}}/frameworks/database/gorm_adapter"
+import "{{project_name}}/libs/database/gorm_adapter"
 
 type Gorm{{name_capitalized}}GatewayAdapter struct {
 	DB *gorm_adapter.GormAdapter

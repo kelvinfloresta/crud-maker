@@ -19,7 +19,7 @@ func NewGatewayAdapter(name, namePlural string, fields map[string]generators.Fie
 		name:       name,
 		namePlural: namePlural,
 		fields:     fields,
-		outputFile: fmt.Sprintf("frameworks/database/gateways/%s_gateway/gorm_list.go", strings.ToLower(name)),
+		outputFile: fmt.Sprintf("libs/database/gateways/%s_gateway/gorm_list.go", strings.ToLower(name)),
 	}
 }
 

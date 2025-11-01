@@ -1,6 +1,6 @@
 package {{name}}_case
 
-import g "{{project_name}}/frameworks/database/gateways/{{name}}_gateway"
+import g "{{project_name}}/libs/database/gateways/{{name}}_gateway"
 
 type {{name_capitalized}}Case struct {
 	gateway g.{{name_capitalized}}Gateway

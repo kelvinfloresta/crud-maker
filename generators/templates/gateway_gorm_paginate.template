@@ -1,9 +1,9 @@
 package {{name}}_gateway
 
 import (
-	"{{project_name}}/frameworks/database"
-	"{{project_name}}/frameworks/database/gorm_adapter"
-	"{{project_name}}/frameworks/database/gorm_adapter/models"
+	"{{project_name}}/libs/database"
+	"{{project_name}}/libs/database/gorm_adapter"
+	"{{project_name}}/libs/database/gorm_adapter/models"
 )
 
 func (g Gorm{{name_capitalized}}GatewayAdapter) Paginate(filter PaginateFilter, paginate database.PaginateInput) (*PaginateOutput, error) {

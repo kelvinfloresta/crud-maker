@@ -2,8 +2,8 @@ package {{name}}_case
 
 import (
 	"context"
-	"{{project_name}}/frameworks/database/gorm_adapter"
-	g "{{project_name}}/frameworks/database/gateways/{{name}}_gateway"
+	"{{project_name}}/libs/database/gorm_adapter"
+	g "{{project_name}}/libs/database/gateways/{{name}}_gateway"
 )
 
 type PaginateFilter struct {
